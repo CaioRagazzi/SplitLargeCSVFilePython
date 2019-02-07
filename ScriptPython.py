@@ -24,12 +24,12 @@ def splitFile(filename):
                 with open(outputFile, "a", newline='', encoding="utf8") as outputFileOpen:
                     current_out_writer = csv.writer(outputFileOpen, delimiter=reportDelimiter)
                     current_out_writer.writerow(header)
-                    current_out_writer.writerow(row)
+                    current_out_writer.writerow(row[1])
                     outputFileOpen.close()
             else:
                 with open(outputFile, "a", newline='', encoding="utf8") as outputFileOpen:
                     current_out_writer = csv.writer(outputFileOpen, delimiter=reportDelimiter)
-                    current_out_writer.writerow(row)
+                    current_out_writer.writerow(row[1])
                     outputFileOpen.close()
 
 if __name__ == '__main__':
