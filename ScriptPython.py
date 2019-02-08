@@ -8,11 +8,12 @@ splitedFiles = []
 def main():
     tamanhoArquivo = getSize(reportFilename)
 
-    if tamanhoArquivo > 1:
+    if tamanhoArquivo > 10:
         splitFile(reportFilename)
-    
-    for file in splitedFiles:
-        formatFile(file)
+        for file in splitedFiles:
+            formatFile(file)
+    else:
+        formatFile(reportFilename)
 
 def getSize(filename):
     tamanhoarquivo = os.path.getsize(filename)
@@ -31,7 +32,7 @@ def splitFile(filename):
             current_out_writer.writerow(header)
         outputFileOpen.close()
         for row in enumerate(reader):
-            if os.path.getsize(outputFile) > 1048576:
+            if os.path.getsize(outputFile) > 104857600:
                 current_piece += 1
                 outputFile = os.path.join(outputPath, str(current_piece) + filename)
                 splitedFiles.append(str(current_piece) + filename)
@@ -39,12 +40,12 @@ def splitFile(filename):
                     current_out_writer = csv.writer(outputFileOpen, delimiter=reportDelimiter)
                     current_out_writer.writerow(header)
                     current_out_writer.writerow(row[1])
-                    outputFileOpen.close()
+                outputFileOpen.close()
             else:
                 with open(outputFile, "a", newline='', encoding="utf8") as outputFileOpen:
                     current_out_writer = csv.writer(outputFileOpen, delimiter=reportDelimiter)
                     current_out_writer.writerow(row[1])
-                    outputFileOpen.close()
+                outputFileOpen.close()
     os.remove(filename)
 
 def formatFile(filename):
@@ -64,7 +65,7 @@ def formatFile(filename):
             current_out_writer = csv.writer(outputFileOpen, delimiter=reportDelimiter)
             for row in reader_to_list:
                 current_out_writer.writerow(row)
-        outputFileOpen.close()
+    outputFileOpen.close()
     originalFile.close()
     os.remove(filename)
 
