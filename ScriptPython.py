@@ -1,58 +1,58 @@
 import csv, os, datetime, ntpath
 
-reportFilename = "C:\\ItauPython\\teste.csv"
-reportDelimiter = ';'
-outputPath = '.'
-splitedFiles = []
+report_file_name = "C:\\ItauPython\\teste.csv"
+report_delimiter = ';'
+output_path = '.'
+splited_files = []
 
 def main():
-    tamanhoArquivo = getSize(reportFilename)
+    file_size = getsize(report_file_name)
 
-    if tamanhoArquivo > 512:
-        splitFile(reportFilename)
-        for file in splitedFiles:
-            formatFile(file)
+    if file_size > 1:
+        splitfile(report_file_name)
+        for file in splited_files:
+            formatfile(file)
     else:
-        formatFile(reportFilename)
+        formatfile(report_file_name)
 
-def getSize(filename):
-    tamanhoarquivo = os.path.getsize(filename)
-    #return (tamanhoarquivo / (1024 ** 3))
-    return (tamanhoarquivo)
+def getsize(filename):
+    file_size = os.path.getsize(filename)
+    return (file_size / (1024 ** 3))
+    #return (file_size)
 
-def splitFile(filename):
+def splitfile(filename):
     with open(os.path.abspath(filename), "r", newline='', encoding="utf8") as originalFile:
-        reader = csv.reader(originalFile, delimiter=reportDelimiter)
+        reader = csv.reader(originalFile, delimiter=report_delimiter)
         current_piece = 1
-        outputFile = os.path.join(outputPath, str(current_piece) + ntpath.basename(filename))
-        splitedFiles.append(str(current_piece) + ntpath.basename(filename))
-        with open(os.path.abspath(outputFile), "w", newline='', encoding="utf8") as outputFileOpen:
-            current_out_writer = csv.writer(outputFileOpen, delimiter=reportDelimiter)
+        output_file = os.path.join(output_path, str(current_piece) + ntpath.basename(filename))
+        splited_files.append(str(current_piece) + ntpath.basename(filename))
+        with open(os.path.abspath(output_file), "w", newline='', encoding="utf8") as output_file_open:
+            current_out_writer = csv.writer(output_file_open, delimiter=report_delimiter)
             header = next(reader)
             current_out_writer.writerow(header)
-        outputFileOpen.close()
+        output_file_open.close()
         for row in enumerate(reader):
-            if os.path.getsize(outputFile) > 1024:
+            if os.path.getsize(output_file) > 1073741824:
                 current_piece += 1
-                outputFile = os.path.join(outputPath, str(current_piece) + ntpath.basename(filename))
-                splitedFiles.append(str(current_piece) + ntpath.basename(filename))
-                with open(os.path.abspath(outputFile), "a", newline='', encoding="utf8") as outputFileOpen:
-                    current_out_writer = csv.writer(outputFileOpen, delimiter=reportDelimiter)
+                output_file = os.path.join(output_path, str(current_piece) + ntpath.basename(filename))
+                splited_files.append(str(current_piece) + ntpath.basename(filename))
+                with open(os.path.abspath(output_file), "a", newline='', encoding="utf8") as output_file_open:
+                    current_out_writer = csv.writer(output_file_open, delimiter=report_delimiter)
                     current_out_writer.writerow(header)
                     current_out_writer.writerow(row[1])
-                outputFileOpen.close()
+                output_file_open.close()
             else:
-                with open(os.path.abspath(outputFile), "a", newline='', encoding="utf8") as outputFileOpen:
-                    current_out_writer = csv.writer(outputFileOpen, delimiter=reportDelimiter)
+                with open(os.path.abspath(output_file), "a", newline='', encoding="utf8") as output_file_open:
+                    current_out_writer = csv.writer(output_file_open, delimiter=report_delimiter)
                     current_out_writer.writerow(row[1])
-                outputFileOpen.close()
+                output_file_open.close()
     os.remove(filename)
 
-def formatFile(filename):
+def formatfile(filename):
     current_piece = 'ft'
     cabecalho = '0' + str(datetime.datetime.now())
     with open(os.path.abspath(filename), "r", newline='', encoding="utf8") as originalFile:
-        reader = csv.reader(originalFile, delimiter=reportDelimiter)
+        reader = csv.reader(originalFile, delimiter=report_delimiter)
         reader_to_list = list(reader)
         reader_to_list.remove(reader_to_list[0])
         total_registros = len(reader_to_list)
@@ -60,12 +60,12 @@ def formatFile(filename):
             reader_to_list[i].insert(0, '1')
         reader_to_list.insert(0, ['0', cabecalho])
         reader_to_list.append(['9', str(total_registros)])
-        outputFile = os.path.join(outputPath, str(current_piece) + ntpath.basename(filename))
-        with open(os.path.abspath(outputFile), "w", newline='', encoding="utf8") as outputFileOpen:
-            current_out_writer = csv.writer(outputFileOpen, delimiter=reportDelimiter)
+        output_file = os.path.join(output_path, str(current_piece) + ntpath.basename(filename))
+        with open(os.path.abspath(output_file), "w", newline='', encoding="utf8") as output_file_open:
+            current_out_writer = csv.writer(output_file_open, delimiter=report_delimiter)
             for row in reader_to_list:
                 current_out_writer.writerow(row)
-    outputFileOpen.close()
+    output_file_open.close()
     originalFile.close()
     os.remove(filename)
 
