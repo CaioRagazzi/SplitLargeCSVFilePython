@@ -8,7 +8,7 @@ splited_files = []
 def main():
     file_size = getsize(report_file_name)
 
-    if file_size > 1:
+    if file_size > 50:
         splitfile(report_file_name)
         for file in splited_files:
             formatfile(file)
@@ -65,7 +65,7 @@ def formatfile(filename):
             current_out_writer = csv.writer(output_file_open, delimiter=report_delimiter)
             for row in reader_to_list:
                 current_out_writer.writerow(row)
-    output_file_open.close()
+        output_file_open.close()
     originalFile.close()
     os.remove(filename)
 
